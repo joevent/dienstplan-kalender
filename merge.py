@@ -30,8 +30,21 @@ import requests
 
 # Feed-Adressen kommen aus GitHub-Secrets (Settings > Secrets and variables > Actions),
 # damit die Zugangsschluessel nicht im oeffentlichen Code stehen.
-FEED1_URL = os.environ["FEED1_URL"]
-FEED2_URL = os.environ["FEED2_URL"]
+def _feed_url(name):
+    """Liest eine Feed-Adresse aus der Umgebung und macht sie abrufbar:
+    entfernt Leerzeichen/Anfuehrungszeichen, wandelt webcal:// in https:// um."""
+    url = os.environ[name].strip().strip('"').strip("'").strip()
+    if url.lower().startswith("webcals://"):
+        url = "https://" + url[len("webcals://"):]
+    elif url.lower().startswith("webcal://"):
+        url = "https://" + url[len("webcal://"):]
+    elif "://" not in url:
+        url = "https://" + url
+    return url
+
+
+FEED1_URL = _feed_url("FEED1_URL")
+FEED2_URL = _feed_url("FEED2_URL")
 OUT_FILE = "dienstplan.ics"
 
 PROP_RE_TMPL = r"(?m)^{name}(;[^:\r\n]*)?:(.*)$"
