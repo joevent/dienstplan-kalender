@@ -21,6 +21,9 @@ jobs:
       - run: pip install requests
 
       - run: python merge.py
+        env:
+          FEED1_URL: ${{ secrets.FEED1_URL }}
+          FEED2_URL: ${{ secrets.FEED2_URL }}
 
       - name: Commit and push if changed
         run: |

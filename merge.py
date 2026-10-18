@@ -21,14 +21,17 @@ Quelle 2 (Luftrettung, Fleetplan):
 
 Ausgabe: dienstplan.ics im selben Ordner wie dieses Skript.
 """
+import os
 import re
 import uuid
 from datetime import datetime, timedelta, timezone
 
 import requests
 
-FEED1_URL = "https://careman.itc.drk.de:8082/calendar/roster/cf08d2e5-81ed-40a4-9a5e-8844f2982fea.ics"
-FEED2_URL = "https://drf.fleetplan.net/api/ical/feed/5067/5077085?token=41191133-31d5-4efc-aed4-943b26a45115"
+# Feed-Adressen kommen aus GitHub-Secrets (Settings > Secrets and variables > Actions),
+# damit die Zugangsschluessel nicht im oeffentlichen Code stehen.
+FEED1_URL = os.environ["FEED1_URL"]
+FEED2_URL = os.environ["FEED2_URL"]
 OUT_FILE = "dienstplan.ics"
 
 PROP_RE_TMPL = r"(?m)^{name}(;[^:\r\n]*)?:(.*)$"
